@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+# encoding: utf-8
+# coding style: pep8
+# ====================================================
+#   Copyright (C)2019 All rights reserved.
+#
+#   Author        : Eskimo
+#   Email         : zhangfaninner@163.com
+#   File Name     : ranker.py
+#   Last Modified : 2019-09-02 20:57
+#   Describe      :
+#
+# ====================================================
+
+import sys
+# import os
+import os
+from torch import optim
+
+
+class AbstractNeuralRanker():
+    def  __init__(self, id =None, ranking_function = None, opt="Adam", lr = 1e-3, weight_decay = 1e-3):
+        self.id = id
+        self.opt = opt
+        self.weight_decay = weight_decay
+        self.init_optimizer()
+
+    def init_optimizer(self):
+        if 'Adam' == self.opt:
+            self.optimizer = optim.Adam(self.ranking_function.get_parameters(), lr=self.lr, weight_decay=self.weight_decay)  # use regularization
+        elif 'RMS' == self.opt:
+            self.optimizer = optim.RMSprop(self.ranking_function.get_parameters(), lr=self.lr, weight_decay=self.weight_decay)  # use regularization
+        else:
+            raise NotImplementedError
+
+    def reset_parameters(self):
+        pass
+
+    def train(self, batch_ranks, batch_std, train=True):
+        pass
+
+    def predict(self, train=False):
+        pass
+
+    def save_model(self, dir, name):
+        pass
+
+    def load(self):
+        pass
+
